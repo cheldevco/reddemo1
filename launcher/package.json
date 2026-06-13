@@ -1,0 +1,15 @@
+{
+  "name": "reddemo-launcher",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "electron": "^42.4.0"
+  }
+}
