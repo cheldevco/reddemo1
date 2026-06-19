@@ -33,11 +33,11 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function topUpBalance() {
-            const emailInput = document.getElementById('email').value.trim().toLowerCase();
+            const usernameInput = document.getElementById('email').value.trim().toLowerCase(); // Поле ввода теперь принимает логин
             const amountInput = parseFloat(document.getElementById('amount').value);
             const status = document.getElementById('status');
 
-            if(!emailInput || isNaN(amountInput) || amountInput <= 0) {
+            if(!usernameInput || isNaN(amountInput) || amountInput <= 0) {
                 status.innerText = "Заполните поля корректно!";
                 status.className = "text-center mt-4 text-red-400";
                 return;
@@ -47,44 +47,42 @@
             status.className = "text-center mt-4 text-yellow-400";
 
             try {
-                // 1. Ищем профиль пользователя по его Email
+                // Ищем профиль пользователя по его логину (username)
                 const { data: profile, error: findError } = await supabaseClient
                     .from('profiles')
                     .select('*')
-                    .eq('email', emailInput)
+                    .eq('username', usernameInput)
                     .maybeSingle();
 
-                if (findError || !profile) {
-                    status.innerText = "Пользователь с таким Email не найден!";
-                    status.className = "text-center mt-4 text-red-400";
-                    return;
-                }
+            if (findError || !profile) {
+                status.innerText = "Пользователь с таким логином не найден!";
+                status.className = "text-center mt-4 text-red-400";
+                return;
+            }
 
-                // 2. Рассчитываем новый баланс
-                const currentBalance = parseFloat(profile.balance || 0);
-                const newBalance = currentBalance + amountInput;
+            const currentBalance = parseFloat(profile.balance || 0);
+            const newBalance = currentBalance + amountInput;
 
-                // 3. Отправляем обновление баланса обратно в базу
-                const { error: updateError } = await supabaseClient
-                    .from('profiles')
-                    .update({ balance: newBalance })
-                    .eq('id', profile.id);
+            // Отправляем обновление
+            const { error: updateError } = await supabaseClient
+                .from('profiles')
+                .update({ balance: newBalance })
+                .eq('id', profile.id);
 
-                if (updateError) {
-                    status.innerText = "Ошибка при обновлении баланса в базе.";
-                    status.className = "text-center mt-4 text-red-400";
-                } else {
-                    status.innerText = `🔥 Успешно зачислено! Текущий баланс: ${newBalance} руб.`;
-                    status.className = "text-center mt-4 text-green-400";
-                    document.getElementById('amount').value = "";
-                }
-
+            if (updateError) {
+                status.innerText = "Ошибка при обновлении баланса.";
+                status.className = "text-center mt-4 text-red-400";
+            } else {
+                status.innerText = `🔥 Успешно зачислено! Текущий баланс: ${newBalance} руб.`;
+                status.className = "text-center mt-4 text-green-400";
+                document.getElementById('amount').value = "";
+            }
             } catch(e) {
-                console.error(e);
                 status.innerText = "Произошла критическая ошибка сети.";
                 status.className = "text-center mt-4 text-red-400";
             }
         }
+        
     </script>
 </body>
 </html>
