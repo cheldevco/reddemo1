@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пополнение баланса RedDemo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body class="bg-[#1a0f0f] text-white flex items-center justify-center min-h-screen">
+    <div class="bg-[#2b1616] p-8 rounded-lg shadow-xl w-full max-w-md border border-[#421f1f]">
+        <h1 class="text-2xl font-bold text-center text-[#ff4d4d] mb-6">ПОПОЛНЕНИЕ БАЛАНСА</h1>
+        
+        <div class="mb-4">
+            <label class="block text-sm text-gray-400 mb-2">Ваш Email в лаунчере</label>
+            <input id="email" type="email" placeholder="example@mail.com" class="w-full p-3 rounded bg-[#421f1f] border border-[#802b2b] text-white focus:outline-none focus:border-[#ff4d4d]">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm text-gray-400 mb-2">Сумма пополнения (RUB)</label>
+            <input id="amount" type="number" placeholder="500" class="w-full p-3 rounded bg-[#421f1f] border border-[#802b2b] text-white focus:outline-none focus:border-[#ff4d4d]">
+        </div>
+
+        <button onclick="topUpBalance()" class="w-full bg-[#992222] hover:bg-[#cc3333] text-white font-bold py-3 px-4 rounded transition duration-200">
+            Оплатить баланс
+        </button>
+
+        <p id="status" class="text-center mt-4 font-semibold"></p>
+    </div>
+
+    <script>
+        // Инициализация Supabase (замени на свои ключи)
+        const SUPABASE_URL = "https://твоя-ссылка.supabase.co";
+        const SUPABASE_KEY = "твой-anon-key";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function topUpBalance() {
+            const email = document.getElementById('email').value.trim();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const status = document.getElementById('status');
+
+            if(!email || isNaN(amount) || amount <= 0) {
+                status.innerText = "Заполните поля корректно!";
+                status.className = "text-center mt-4 text-red-400";
+                return;
+            }
+
+            status.innerText = "Обработка запроса...";
+            status.className = "text-center mt-4 text-yellow-400";
+
+            try {
+                // 1. Ищем пользователя по Email через RPC или таблицу профилей (если у тебя там синхронизирован email)
+                // Самый надежный способ для витрины без авторизации — найти профиль в базе
+                // Примечание: Для работы этого поиска, при регистрации желательно сохранять email в таблицу профилей,
+                // либо запрашивать ID юзера напрямую. Для примера обновим через SQL/функцию Supabase:
+                
+                status.innerText = "Имитация успешной оплаты! Баланс начислен.";
+                status.className = "text-center mt-4 text-green-400";
+            } catch(e) {
+                status.innerText = "Ошибка проведения платежа.";
+                status.className = "text-center mt-4 text-red-400";
+            }
+        }
+    </script>
+</body>
+</html>

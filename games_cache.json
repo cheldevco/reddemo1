@@ -1,0 +1,42 @@
+[
+    {
+        "id": 6,
+        "name": "Far Cry 1",
+        "description": null,
+        "exe_path": "null",
+        "created_at": "2026-06-15T20:13:49.486421+00:00",
+        "price": 0,
+        "download_url": "https://github.com/cheldevco/reddemo-storage/releases/download/Games/Far.Cry.1.7z",
+        "launch_exe": "Far Cry 1\\Far Cry 1\\Far Cry 1.bat"
+    },
+    {
+        "id": 8,
+        "name": "Far Cry 2",
+        "description": null,
+        "exe_path": "Null",
+        "created_at": "2026-06-17T08:10:48.345329+00:00",
+        "price": 1240,
+        "download_url": "https://drive.usercontent.google.com/download?id=1NLQRNfhb6hY5qaWjs4gJXULbW__DDM3V&export=download&authuser=0&confirm=t&uuid=80458613-f16c-47a6-876d-6a4e1b44f0e9&at=AAINaIKUXPzaGDONPvHiitvuvNFF%3A1781684275987",
+        "launch_exe": "Far Cry 2\\Far Cry 2 Opti V2\\1-FAR CRY 2 - NORMAL.bat"
+    },
+    {
+        "id": 9,
+        "name": "BeamNG.drive",
+        "description": null,
+        "exe_path": "null",
+        "created_at": "2026-06-17T19:17:12.858808+00:00",
+        "price": 0,
+        "download_url": "https://drive.usercontent.google.com/download?id=1hlnmEZteh1l_4d2ztqIbAtOC6ZPO1Cj6&export=download&authuser=0&confirm=t&uuid=5ad322f9-4608-47e3-b670-a47ab8d3631e&at=AAINaIKVTeXDeM95gD2MI0P_TGY0%3A1781723707662",
+        "launch_exe": "BeamNG.drive\\BeamNG.drive\\1-BEAMNG DRIVE - NORMAL.bat"
+    },
+    {
+        "id": 10,
+        "name": "Geometry Dash 2.208",
+        "description": null,
+        "exe_path": "null",
+        "created_at": "2026-06-18T14:16:55.670723+00:00",
+        "price": 0,
+        "download_url": "https://drive.usercontent.google.com/download?id=1hf3FJ7rMJ35sYKqhQeJFQJBZQ4QrlCmp&export=download&authuser=1&confirm=t&uuid=39810d85-d070-4aed-85a5-2d15ad98ac24&at=AAINaIJUaFC9Wk7oxSSl4rc8IF8o:1781791856142",
+        "launch_exe": "Geometry Dash 2.208\\Geometry Dash 2.2 Optimizado By OptiJuegos\\4-Geometry Dash OpenGL Ventana.bat"
+    }
+]
