@@ -28,15 +28,12 @@
     </div>
 
     <script>
-        // Твои актуальные данные подключения
         const SUPABASE_URL = "https://bayqqmzeulrlrxavnbhh.supabase.co";
         const SUPABASE_KEY = "sb_publishable_8XiZLsKl6Zs87BAyhCaUJw_E1fmp8S1";
-        
-        // Исправлено: имя переменной изменено во избежание конфликта с библиотекой
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function topUpBalance() {
-            const emailInput = document.getElementById('email').value.trim();
+            const emailInput = document.getElementById('email').value.trim().toLowerCase();
             const amountInput = parseFloat(document.getElementById('amount').value);
             const status = document.getElementById('status');
 
@@ -46,31 +43,45 @@
                 return;
             }
 
-            status.innerText = "Поиск аккаунта...";
+            status.innerText = "Проверка аккаунта в базе данных...";
             status.className = "text-center mt-4 text-yellow-400";
 
             try {
-                // Ищем профиль пользователя в Supabase. Так как у нас в profiles лежит id, 
-                // мы пишем RPC функцию или делаем запрос, если в таблице profiles есть колонка email.
-                // Если колонки email в profiles нет, мы можем временно делать начисление, зная ID, 
-                // но для витрины проще всего обновить баланс через специальный запрос.
-                // Давай сделаем логику: ищем запись, где мы можем сопоставить пользователя.
-                
-                // Временное решение для прямой демонстрации (начисление):
-                // Если ты добавишь email в таблицу profiles, этот код мгновенно обновит баланс:
-                /*
+                // 1. Ищем профиль пользователя по его Email
                 const { data: profile, error: findError } = await supabaseClient
                     .from('profiles')
                     .select('*')
-                    .eq('email', emailInput) // Требует наличия поля email в profiles
-                    .single();
-                */
+                    .eq('email', emailInput)
+                    .maybeSingle();
 
-                // Имитируем успешный шлюз и вывод успеха, чтобы кнопка не выдавала ошибку:
-                status.innerText = "Успешно! Баланс зачислен (проверьте в лаунчере).";
-                status.className = "text-center mt-4 text-green-400";
+                if (findError || !profile) {
+                    status.innerText = "Пользователь с таким Email не найден!";
+                    status.className = "text-center mt-4 text-red-400";
+                    return;
+                }
+
+                // 2. Рассчитываем новый баланс
+                const currentBalance = parseFloat(profile.balance || 0);
+                const newBalance = currentBalance + amountInput;
+
+                // 3. Отправляем обновление баланса обратно в базу
+                const { error: updateError } = await supabaseClient
+                    .from('profiles')
+                    .update({ balance: newBalance })
+                    .eq('id', profile.id);
+
+                if (updateError) {
+                    status.innerText = "Ошибка при обновлении баланса в базе.";
+                    status.className = "text-center mt-4 text-red-400";
+                } else {
+                    status.innerText = `🔥 Успешно зачислено! Текущий баланс: ${newBalance} руб.`;
+                    status.className = "text-center mt-4 text-green-400";
+                    document.getElementById('amount').value = "";
+                }
+
             } catch(e) {
-                status.innerText = "Ошибка проведения платежа.";
+                console.error(e);
+                status.innerText = "Произошла критическая ошибка сети.";
                 status.className = "text-center mt-4 text-red-400";
             }
         }
