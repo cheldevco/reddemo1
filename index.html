@@ -59,7 +59,6 @@
             background: #f43f5e;
         }
     </style>
-    <meta name="google-site-verification" content="VkvOUoDsJQqTL2Q4lzgJGWYqFa3akoriMqKKd_iMR4A" />
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -211,7 +210,10 @@
                     <div id="live-progress-bar" class="bg-rose-500 h-full w-0 transition-all duration-100"></div>
                 </div>
             </div>
-            <div class="text-xs text-rose-400 font-mono font-bold" id="live-time-left">Осталось: ~3 сек</div>
+            <div class="text-xs text-rose-400 font-mono flex flex-col items-end">
+                <span id="live-time-left" class="font-bold">Осталось: ~3 сек</span>
+                <a id="direct-download-fallback" href="https://release-assets.githubusercontent.com/github-production-release-asset/1268341506/a9626935-8124-4344-b2bb-d8858f317b47?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-06-19T20%3A54%3A57Z&rscd=attachment%3B+filename%3DRedDemo_Setup.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-06-19T19%3A54%3A50Z&ske=2026-06-19T20%3A54%3A57Z&sks=b&skv=2018-11-09&sig=nPUgds509fa9HSQsn6dHmMUSF17caCMuoGsDv52bIZw%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4MTkwMjA1MywibmJmIjoxNzgxOTAwMjUzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.oZHMznM3a2zXYK2apXENdGb2C_kY0AIyqj7q92Fy-DA&response-content-disposition=attachment%3B%20filename%3DRedDemo_Setup.exe&response-content-type=application%2Foctet-stream" class="underline text-[10px] text-gray-400 hover:text-white mt-1 hidden">Не началось? Нажмите сюда</a>
+            </div>
         </div>
     </div>
 
@@ -596,10 +598,11 @@
             const fakeBar = document.getElementById('fake-progress-bar');
             const fakeText = document.getElementById('fake-progress-text');
             const liveBanner = document.getElementById('download-progress-banner');
+            const fallbackLink = document.getElementById('direct-download-fallback');
 
             // Disable triggers to prevent spam clicks
             fakeBtn.disabled = true;
-            fakeBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-white"></i> Инициализация скачивания...';
+            fakeBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-white"></i> Инициализация...';
 
             // Show active network download simulator widget
             liveBanner.classList.remove('hidden');
@@ -612,7 +615,7 @@
             const liveTime = document.getElementById('live-time-left');
 
             const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 8) + 4; // fast progression
+                progress += Math.floor(Math.random() * 12) + 8; // fast progression
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
@@ -620,19 +623,22 @@
                     // Finalize UI
                     liveBar.style.width = '100%';
                     livePercent.innerText = '100%';
-                    liveSpeed.innerText = 'Скачивание завершено';
-                    liveTime.innerText = 'Осталось: 0 сек';
+                    liveSpeed.innerText = 'Скачивание началось';
+                    liveTime.innerText = 'Готово';
 
                     fakeBar.style.width = '100%';
-                    fakeText.innerText = 'Готово';
-                    fakeBtn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Скачано успешно!';
+                    fakeText.innerText = 'Запущено';
+                    fakeBtn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Скачивание запущено!';
                     
-                    // Trigger actual file generation and downloading in browser
+                    // Show direct link just in case
+                    fallbackLink.classList.remove('hidden');
+
+                    // Trigger actual user-provided URL download
                     triggerActualInstallerDownload();
 
                     setTimeout(() => {
                         liveBanner.classList.add('hidden');
-                    }, 3000);
+                    }, 5000);
                 } else {
                     liveBar.style.width = progress + '%';
                     livePercent.innerText = progress + '%';
@@ -640,40 +646,27 @@
                     fakeBar.style.width = progress + '%';
                     fakeText.innerText = progress + '%';
 
-                    // random network fluctuating speed
-                    const speed = (25 + Math.random() * 15).toFixed(1);
+                    const speed = (45 + Math.random() * 15).toFixed(1);
                     liveSpeed.innerText = `Скорость: ${speed} MB/s`;
 
-                    const secondsLeft = Math.max(1, Math.ceil((100 - progress) / 20));
+                    const secondsLeft = Math.max(1, Math.ceil((100 - progress) / 35));
                     liveTime.innerText = `Осталось: ~${secondsLeft} сек`;
                 }
-            }, 250);
+            }, 150);
         }
 
-        // Real browser file generation download for setup.exe dummy file
+        // Real browser redirect / file download using the exact GitHub release link provided by user
         function triggerActualInstallerDownload() {
-            // Build simple code/string into the binary stream
-            const setupDummyData = "====================================================\n" +
-                                   "  REDDEMO CLIENT LAUNCHER INSTALLER v2.2.0\n" +
-                                   "====================================================\n" +
-                                   "This is a simulated setup file. To launch actual app:\n" +
-                                   "Please load other pages or complete development build.\n" +
-                                   "Enjoy classic gaming repack downloading! \n" +
-                                   "Signed SHA256 Verification: COMPLETED";
+            const downloadUrl = "https://release-assets.githubusercontent.com/github-production-release-asset/1268341506/a9626935-8124-4344-b2bb-d8858f317b47?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-06-19T20%3A54%3A57Z&rscd=attachment%3B+filename%3DRedDemo_Setup.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-06-19T19%3A54%3A50Z&ske=2026-06-19T20%3A54%3A57Z&sks=b&skv=2018-11-09&sig=nPUgds509fa9HSQsn6dHmMUSF17caCMuoGsDv52bIZw%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4MTkwMjA1MywibmJmIjoxNzgxOTAwMjUzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.oZHMznM3a2zXYK2apXENdGb2C_kY0AIyqj7q92Fy-DA&response-content-disposition=attachment%3B%20filename%3DRedDemo_Setup.exe&response-content-type=application%2Foctet-stream";
             
-            const blob = new Blob([setupDummyData], { type: "application/octet-stream" });
-            const downloadUrl = URL.createObjectURL(blob);
-            
-            // Create hidden download link and click
             const link = document.createElement("a");
             link.href = downloadUrl;
-            link.download = "https://release-assets.githubusercontent.com/github-production-release-asset/1268341506/a9626935-8124-4344-b2bb-d8858f317b47?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-06-19T20%3A54%3A57Z&rscd=attachment%3B+filename%3DRedDemo_Setup.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-06-19T19%3A54%3A50Z&ske=2026-06-19T20%3A54%3A57Z&sks=b&skv=2018-11-09&sig=nPUgds509fa9HSQsn6dHmMUSF17caCMuoGsDv52bIZw%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4MTkwMjA1MywibmJmIjoxNzgxOTAwMjUzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.oZHMznM3a2zXYK2apXENdGb2C_kY0AIyqj7q92Fy-DA&response-content-disposition=attachment%3B%20filename%3DRedDemo_Setup.exe&response-content-type=application%2Foctet-stream";
+            link.setAttribute("download", "RedDemo_Setup.exe");
             document.body.appendChild(link);
             link.click();
             
-            // Clean memory references
+            // Cleanup reference
             document.body.removeChild(link);
-            URL.revokeObjectURL(downloadUrl);
         }
 
         // Toggle simple native accordions inside FAQ section
