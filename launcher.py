@@ -45,27 +45,27 @@ class RedDemoLauncher(cctk.CTk):
             try:
                 with open(CONFIG_FILE, "r") as f:
                     config = json.load(f)
-                session_string = config.get("session")
-                if session_string:
-                    # В реальном Supabase здесь восстанавливается сессия, 
-                    # для стабильности сделаем проверку через сохраненные email/password если они есть
-                    email = config.get("email")
-                    password = config.get("password")
-                    if email and password:
-                        res = self.supabase.auth.sign_in_with_password({"email": email, "password": password})
-                        if res.user:
-                            self.current_user = res.user
-                            self.load_launcher_data()
-                            return
+                email = config.get("email")
+                password = config.get("password")
+                if email and password:
+                    print(f"[AUTO-LOGIN] Пробуем войти в аккаунт: {email}")
+                    res = self.supabase.auth.sign_in_with_password({"email": email, "password": password})
+                    if res.user:
+                        self.current_user = res.user
+                        self.load_launcher_data()
+                        return
             except Exception as e:
                 print(f"[AUTO-LOGIN] Ошибка авто-входа: {e}")
         
-        # Если авто-вход не сработал, показываем форму
+        # Если авто-вход не сработал или нет конфига, показываем форму входа
         self.build_auth_layout()
 
     def save_credentials(self, email, password):
-        with open(CONFIG_FILE, "w") as f:
-            json.dump({"email": email, "password": password}, f)
+        try:
+            with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+                json.dump({"email": email, "password": password}, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"[CONFIG ERROR] Не удалось сохранить кэш входа: {e}")
 
     # ==========================================
     # ИНТЕРФЕЙС: ВХОД И РЕГИСТРАЦИЯ
@@ -106,6 +106,9 @@ class RedDemoLauncher(cctk.CTk):
     def process_login(self):
         email = self.entry_email.get().strip()
         password = self.entry_password.get().strip()
+        if not email or not password:
+            self.error_label.configure(text="Заполните все поля!")
+            return
         try:
             res = self.supabase.auth.sign_in_with_password({"email": email, "password": password})
             if res.user:
@@ -118,6 +121,9 @@ class RedDemoLauncher(cctk.CTk):
     def process_register(self):
         email = self.entry_email.get().strip()
         password = self.entry_password.get().strip()
+        if not email or not password:
+            self.error_label.configure(text="Заполните все поля!")
+            return
         if len(password) < 6:
             self.error_label.configure(text="Пароль должен быть от 6 символов!")
             return
@@ -145,14 +151,18 @@ class RedDemoLauncher(cctk.CTk):
                         self.user_profile["owned_games"] = [int(x) for x in clean_og.split(",") if x.strip()]
                     elif isinstance(og, list):
                         self.user_profile["owned_games"] = [int(x) for x in og]
-            except Exception:
+            except Exception as e:
+                print(f"[DATA ERROR] Не удалось загрузить профиль: {e}")
                 self.user_profile = {"balance": 0, "owned_games": []}
 
         try:
             games_res = self.supabase.table("games").select("*").execute()
             if games_res.data:
                 self.games_list = games_res.data
-        except Exception:
+                with open("games_cache.json", "w", encoding="utf-8") as f:
+                    json.dump(self.games_list, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            print(f"[DATA WARNING] Сеть недоступна, работаем через кэш: {e}")
             if os.path.exists("games_cache.json"):
                 with open("games_cache.json", "r", encoding="utf-8") as f:
                     self.games_list = json.load(f)
@@ -161,7 +171,7 @@ class RedDemoLauncher(cctk.CTk):
         self.build_main_layout()
 
     # ==========================================
-    # НОВЫЙ ГОРИЗОНТАЛЬНЫЙ ИНТЕРФЕЙС (ТЕМНО-КРАСНЫЙ)
+    # ИНТЕРФЕЙС RED.DEMO (ГОРИЗОНТАЛЬНЫЙ КРАСНЫЙ)
     # ==========================================
     def build_main_layout(self):
         self.configure(fg_color="#1a0f0f")
@@ -208,12 +218,11 @@ class RedDemoLauncher(cctk.CTk):
         self.switch_to_store()
 
     # ==========================================
-    # ДИНАМИЧЕСКИЙ СЧЕТ ВАЛЮТЫ
+    # РАСЧЕТ И ОБНОВЛЕНИЕ ВАЛЮТЫ
     # ==========================================
     def change_currency(self, choice):
         self.current_currency = choice
         self.update_balance_display()
-        # Перерисовываем текущую вкладку, чтобы цены обновились
         if self.btn_store.cget("fg_color") != "transparent":
             self.switch_to_store()
 
@@ -224,33 +233,32 @@ class RedDemoLauncher(cctk.CTk):
         return f"{converted} {self.currency_symbols[self.current_currency]}"
 
     def update_balance_display(self):
-        if hasattr(self, 'lbl_user_info'):
+        if hasattr(self, 'lbl_user_info') and self.lbl_user_info.winfo_exists():
             user_email = self.current_user.email if self.current_user else "GUEST"
             self.lbl_user_info.configure(text=f"{user_email.split('@')[0].upper()} ({self.get_formatted_balance()})")
 
     # ==========================================
-    # КРАСИВОЕ ДИАЛОГОВОЕ ОКНО ДЛЯ КОДОВ АКТИВАЦИИ
+    # ЛОГИКА КОДОВ АКТИВАЦИИ
     # ==========================================
     def open_activation_dialog(self):
-        dialog = cctk.CTkInputDialog(text="Введите секретный код активации баланса или игры:", title="Активация ключа")
+        dialog = cctk.CTkInputDialog(text="Введите промокод на баланс или игру:", title="Активация ключа")
         code = dialog.get_input()
         if code:
             self.process_activation_code(code.strip())
 
     def process_activation_code(self, code):
         try:
-            # Ищем ключ в таблиce promo_codes
             res = self.supabase.table("promo_codes").select("*").eq("code", code).eq("used", False).execute()
             if res.data:
                 promo = res.data[0]
-                reward_type = promo.get("type") # 'balance' или 'game'
-                reward_value = promo.get("value") # сумма или ID игры
+                reward_type = promo.get("type") 
+                reward_value = promo.get("value") 
 
                 if reward_type == "balance":
                     new_balance = self.user_profile.get("balance", 0) + float(reward_value)
                     self.supabase.table("profiles").update({"balance": new_balance}).eq("id", self.current_user.id).execute()
                     self.user_profile["balance"] = new_balance
-                    print(f"[PROMO] Баланс успешно пополнен!")
+                    print("[PROMO] Код на баланс успешно зачислен!")
                 
                 elif reward_type == "game":
                     game_id = int(reward_value)
@@ -259,19 +267,22 @@ class RedDemoLauncher(cctk.CTk):
                         updated_owned.append(game_id)
                     self.supabase.table("profiles").update({"owned_games": updated_owned}).eq("id", self.current_user.id).execute()
                     self.user_profile["owned_games"] = updated_owned
-                    print(f"[PROMO] Игра активирована в библиотеку!")
+                    print("[PROMO] Игра активирована в библиотеку!")
 
-                # Помечаем код как использованный
                 self.supabase.table("promo_codes").update({"used": True}).eq("id", promo.get("id")).execute()
                 self.update_balance_display()
-                self.switch_to_store()
+                
+                if self.btn_library.cget("fg_color") != "transparent":
+                    self.switch_to_library()
+                else:
+                    self.switch_to_store()
             else:
-                print("[PROMO] Неверный или уже активированный код.")
+                print("[PROMO] Неверный или уже использованный промокод.")
         except Exception as e:
             print(f"[PROMO ERROR] Не удалось обработать код: {e}")
 
     # ==========================================
-    # СТРАНИЦЫ МАГАЗИНА И БИБЛИОТЕКИ
+    # СТРАНИЦА: МАГАЗИН ИГР
     # ==========================================
     def switch_to_store(self):
         self.clear_content_area()
@@ -293,7 +304,6 @@ class RedDemoLauncher(cctk.CTk):
             lbl_name = cctk.CTkLabel(item, text=game.get("name") or "Игра", font=cctk.CTkFont(size=15, weight="bold"), text_color="#fff")
             lbl_name.pack(side="left", padx=20)
 
-            # Перевод цены в выбранную валюту
             price_rub = game.get("price", 0)
             price_converted = round(price_rub * self.currency_rates[self.current_currency], 2)
             if self.current_currency == "RUB": price_converted = int(price_rub)
@@ -303,6 +313,9 @@ class RedDemoLauncher(cctk.CTk):
             btn_buy = cctk.CTkButton(item, text=price_text, fg_color="#992222", hover_color="#cc3333", text_color="#fff", width=120, height=34, font=cctk.CTkFont(size=13, weight="bold"), command=lambda g=game: self.purchase_game(g))
             btn_buy.pack(side="right", padx=20)
 
+    # ==========================================
+    # СТРАНИЦА: БИБЛИОТЕКА ИГР
+    # ==========================================
     def switch_to_library(self):
         self.clear_content_area()
         self.btn_store.configure(fg_color="transparent", text_color="#b8b6b4")
@@ -350,7 +363,7 @@ class RedDemoLauncher(cctk.CTk):
             p_bar.pack_forget()
 
     # ==========================================
-    # ОСТАЛЬНАЯ ЛОГИКА (ПОКУПКА, СКАЧИВАНИЕ, ЗАПУСК)
+    # ЛОГИКА ПОКУПКИ
     # ==========================================
     def purchase_game(self, game):
         game_id = game.get("id")
@@ -358,7 +371,7 @@ class RedDemoLauncher(cctk.CTk):
         current_balance = self.user_profile.get("balance", 0)
 
         if current_balance < price:
-            print("Недостаточно средств!")
+            print("Недостаточно средств на балансе!")
             return
 
         updated_owned = list(self.user_profile.get("owned_games", []))
@@ -374,6 +387,9 @@ class RedDemoLauncher(cctk.CTk):
         except Exception as e:
             print(f"Ошибка покупки: {e}")
 
+    # ==========================================
+    # ПОТОКОВОЕ СКАЧИВАНИЕ И РАСПАКОВКА
+    # ==========================================
     def start_download(self, game, button, progress_bar, status_label):
         if self.is_downloading: return
         self.active_progress_bar = progress_bar
@@ -392,6 +408,7 @@ class RedDemoLauncher(cctk.CTk):
             self.is_downloading = False
             return
 
+        # Защищенная проверка Google Диска: если нет явного .zip в ссылке, значит считаем расширением .7z
         ext = ".zip" if ".zip" in url.lower() else ".7z"
         install_dir = os.path.join(os.getcwd(), "Games", game_name)
         os.makedirs(install_dir, exist_ok=True)
@@ -413,14 +430,16 @@ class RedDemoLauncher(cctk.CTk):
                             self.active_progress_bar.set(percent)
                             self.active_status_label.configure(text=f"{round(downloaded/(1024*1024),1)}MB / {round(total_size/(1024*1024),1)}MB")
 
-            self.active_status_label.configure(text="Распаковка...", text_color="#ff9999")
+            self.active_status_label.configure(text="Распаковка файлов...", text_color="#ff9999")
             
             if ext == ".7z":
                 exe_7za = os.path.join(os.getcwd(), "7za.exe")
                 if os.path.exists(exe_7za):
                     cmd = f'"{exe_7za}" x "{archive_path}" -o"{install_dir}" -y'
                     unpack_success = (subprocess.run(cmd, shell=True).returncode == 0)
-                else: unpack_success = False
+                else: 
+                    print("[ERROR] 7za.exe не найден в корне!")
+                    unpack_success = False
             else:
                 import zipfile
                 with zipfile.ZipFile(archive_path, 'r') as archive:
@@ -443,12 +462,15 @@ class RedDemoLauncher(cctk.CTk):
         finally:
             self.is_downloading = False
 
+    # ==========================================
+    # СИСТЕМА ЗАПУСКА ИГРЫ
+    # ==========================================
     def launch_game(self, game_directory, launch_relative_path):
         if not launch_relative_path or launch_relative_path == "null":
             executable_path = None
             for root, dirs, files in os.walk(game_directory):
                 for file in files:
-                    if file.lower() in ["far cry 1.bat", "farcry.exe", "run.bat"]:
+                    if file.lower() in ["far cry 1.bat", "farcry.exe", "run.bat", "farcry2.exe"]:
                         executable_path = os.path.join(root, file)
                         break
                 if executable_path: break
@@ -457,8 +479,11 @@ class RedDemoLauncher(cctk.CTk):
             executable_path = os.path.normpath(os.path.join(games_root, launch_relative_path))
 
         if executable_path and os.path.exists(executable_path):
+            print(f"[LAUNCH] Открытие файла: {executable_path}")
             working_dir = os.path.dirname(executable_path)
             subprocess.Popen(f'"{executable_path}"', cwd=working_dir, shell=True)
+        else:
+            print(f"[LAUNCH ERROR] Не найден файл по пути: {executable_path}")
 
     def clear_content_area(self):
         if hasattr(self, 'content_area') and self.content_area.winfo_exists():
@@ -466,3 +491,27 @@ class RedDemoLauncher(cctk.CTk):
 
     def clear_all_widgets(self):
         for widget in self.winfo_children(): widget.destroy()
+
+
+# ==========================================
+# ТОЧКА ВХОДА И КЛЮЧИ ПОДКЛЮЧЕНИЯ
+# ==========================================
+if __name__ == "__main__":
+    from supabase import create_client, Client
+    
+    # Твои актуальные рабочие ключи из Supabase
+    SUPABASE_URL = "https://bayqqmzeulrlrxavnbhh.supabase.co"
+    SUPABASE_KEY = "sb_publishable_8XiZLsKl6Zs87BAyhCaUJw_E1fmp8S1"
+    
+    try:
+        print("[LAUNCHER START] Авторизация и подключение к базе данных...")
+        supabase_client: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        
+        # Создание и запуск приложения
+        app = RedDemoLauncher(supabase_client)
+        print("[LAUNCHER START] Окно успешно запущено.")
+        app.mainloop()
+        
+    except Exception as init_error:
+        print(f"[CRITICAL ERROR] Не удалось инициализировать лаунчер: {init_error}")
+        input("\nНажмите Enter для закрытия консоли...")

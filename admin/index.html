@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Панель Администратора RedDemo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-[#121212] text-gray-200 p-8">
     <div class="max-w-4xl mx-auto">
@@ -13,44 +13,60 @@
         <div class="bg-[#1e1e1e] p-6 rounded-lg mb-8 border border-red-900/30">
             <h2 class="text-xl font-bold mb-4 text-red-400">Сгенерировать Код Активации</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <input id="promo_code" type="text" placeholder="Пример: GIVEAWAY500" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none">
-                <select id="promo_type" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none">
+                <input id="promo_code" type="text" placeholder="Пример: GIFT500" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
+                <select id="promo_type" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
                     <option value="balance">Пополнение Баланса (RUB)</option>
                     <option value="game">Активация игры (Указать ID)</option>
                 </select>
-                <input id="promo_value" type="text" placeholder="Значение (500 или ID игры)" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none">
+                <input id="promo_value" type="text" placeholder="Значение (500 или ID игры)" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
             </div>
-            <button onclick="createPromo()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-6 rounded">
+            <button onclick="createPromo()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-6 rounded transition">
                 Создать Ключ
             </button>
-            <p id="promo_status" class="mt-2 text-sm"></p>
+            <p id="promo_status" class="mt-4 text-sm font-semibold"></p>
         </div>
     </div>
 
     <script>
         const SUPABASE_URL = "https://bayqqmzeulrlrxavnbhh.supabase.co";
         const SUPABASE_KEY = "sb_publishable_8XiZLsKl6Zs87BAyhCaUJw_E1fmp8S1";
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Избегаем конфликтов имён
+        const supabaseAdmin = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function createPromo() {
-            const code = document.getElementById('promo_code').value.trim();
-            const type = document.getElementById('promo_type').value;
-            const value = document.getElementById('promo_value').value.trim();
+            const codeInput = document.getElementById('promo_code').value.trim();
+            const typeInput = document.getElementById('promo_type').value;
+            const valueInput = document.getElementById('promo_value').value.trim();
             const status = document.getElementById('promo_status');
 
-            if(!code || !value) {
+            if(!codeInput || !valueInput) {
                 status.innerText = "Заполните все поля!";
                 status.className = "mt-2 text-sm text-red-400";
                 return;
             }
 
-            const { data, error } = await supabase.table('promo_codes').insert([{ code, type, value }]);
+            status.innerText = "Создание кода в базе данных...";
+            status.className = "mt-2 text-sm text-yellow-400";
+
+            // Отправляем строку в таблицу promo_codes
+            const { data, error } = await supabaseAdmin
+                .from('promo_codes')
+                .insert([
+                    { code: codeInput, type: typeInput, value: valueInput, used: false }
+                ]);
+
             if(error) {
-                status.innerText = "Ошибка: Возможно такой код уже есть.";
+                console.error(error);
+                status.innerText = "Ошибка: Не удалось создать код (возможно, такой код уже существует или RLS заблокировал запрос).";
                 status.className = "mt-2 text-sm text-red-400";
             } else {
-                status.innerText = `Код "${code}" успешно создан и активен!`;
+                status.innerText = `🔥 Код "${codeInput}" успешно создан и готов к активации в лаунчере!`;
                 status.className = "mt-2 text-sm text-green-400";
+                
+                // Очищаем форму
+                document.getElementById('promo_code').value = "";
+                document.getElementById('promo_value').value = "";
             }
         }
     </script>
