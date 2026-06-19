@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать RedDemo Launcher — Официальный сайт игрового клиента</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        reddemo: {
+                            bg: '#05070a',
+                            card: '#0c0f17',
+                            accent: '#f43f5e',
+                            accentHover: '#e11d48',
+                            border: '#1e293b',
+                            textMuted: '#94a3b8',
+                            header: '#080b11',
+                            panel: '#101524'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #05070a;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+        .glow-effect {
+            box-shadow: 0 0 30px rgba(244, 63, 94, 0.2);
+        }
+        .glow-text {
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #05070a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f43f5e;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-reddemo-header/90 backdrop-blur-md border-b border-reddemo-border sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <div class="bg-gradient-to-br from-rose-500 to-red-700 p-2.5 rounded-xl shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-cloud-arrow-down text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-rose-500 to-red-600 bg-clip-text text-transparent">RED<span class="text-white">DEMO</span></span>
+                        <span class="text-[9px] text-rose-500 font-bold block leading-none tracking-widest uppercase">Игровой лаунчер нового поколения</span>
+                    </div>
+                </a>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#features" class="text-gray-300 hover:text-rose-500 transition-colors">Преимущества</a>
+                    <a href="#games" class="text-gray-300 hover:text-rose-500 transition-colors">Каталог Игр</a>
+                    <a href="#requirements" class="text-gray-300 hover:text-rose-500 transition-colors">Системные требования</a>
+                    <a href="#faq" class="text-gray-300 hover:text-rose-500 transition-colors">FAQ</a>
+                </nav>
+
+                <!-- Header CTA Button -->
+                <div>
+                    <button onclick="startDownloadClient()" class="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wider uppercase transition-all shadow-lg shadow-rose-600/20 active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Скачать Лаунчер
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative py-20 lg:py-32 overflow-hidden border-b border-reddemo-border">
+        <!-- Ambient Glow Circles -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-rose-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -top-10 left-10 w-72 h-72 bg-purple-600/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Column: Copy & Actions -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-rose-500/10 text-rose-400 border border-rose-500/20 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Релиз версии v2.2.0
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
+                        Все легендарные игры в <span class="bg-gradient-to-r from-rose-500 to-red-500 bg-clip-text text-transparent glow-text">один клик</span>.
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-reddemo-textMuted max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        RedDemo Launcher — это ультраскоростной клиент для ПК, позволяющий бесплатно скачивать, автоматически устанавливать и запускать популярные репаки без рекламы, вирусов и ограничений скорости.
+                    </p>
+
+                    <!-- Large Download Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="startDownloadClient()" class="glow-effect bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white px-8 py-4.5 rounded-2xl font-black text-base transition-all active:scale-95 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-download text-lg"></i>
+                            <div class="text-left">
+                                <span class="block text-[10px] uppercase font-bold text-rose-200 tracking-wider">Загрузить бесплатно</span>
+                                <span>Скачать для Windows</span>
+                            </div>
+                        </button>
+                        <a href="#games" class="bg-reddemo-card hover:bg-reddemo-panel border border-reddemo-border text-white px-8 py-4.5 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-gamepad text-gray-400"></i> Обзор 10 игр на ПК
+                        </a>
+                    </div>
+
+                    <!-- Client Specs Metadata -->
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-6 pt-4 text-xs text-reddemo-textMuted">
+                        <div class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-green-500"></i> Windows 10/11 x64</div>
+                        <div class="flex items-center gap-1.5"><i class="fa-solid fa-shield text-rose-500"></i> Без рекламы и майнеров</div>
+                        <div class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-yellow-500"></i> P2P Многопоточность</div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive App Preview Window -->
+                <div class="lg:col-span-5">
+                    <div class="bg-reddemo-card border border-reddemo-border rounded-2xl p-2 shadow-2xl relative">
+                        <div class="bg-slate-950/40 rounded-xl overflow-hidden border border-slate-800">
+                            <!-- Windows Title Bar -->
+                            <div class="bg-reddemo-header px-4 py-2 flex items-center justify-between border-b border-reddemo-border text-[10px] text-gray-500 font-mono">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                                    <span class="ml-2 text-gray-400">RedDemo_Setup_v2.2.0.exe</span>
+                                </div>
+                                <i class="fa-solid fa-window-minimize"></i>
+                            </div>
+
+                            <!-- Launcher Mockup Graphic UI -->
+                            <div class="p-6 bg-[#090d16] text-center space-y-6 relative">
+                                <div class="w-16 h-16 bg-rose-500/10 rounded-2xl border border-rose-500/30 flex items-center justify-center mx-auto text-rose-500 text-3xl animate-bounce">
+                                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h3 class="text-white font-extrabold text-sm uppercase tracking-wider">Установка RedDemo на ПК</h3>
+                                    <p class="text-xs text-reddemo-textMuted">Создание высокоскоростной директории загрузок</p>
+                                </div>
+
+                                <!-- Fake Installation Slider Preview -->
+                                <div class="bg-reddemo-bg border border-reddemo-border p-4 rounded-xl space-y-2 text-left">
+                                    <div class="flex justify-between text-[11px] font-mono">
+                                        <span class="text-rose-400">Закачка ядра клиента:</span>
+                                        <span id="fake-progress-text" class="font-bold text-white">Готов к установке</span>
+                                    </div>
+                                    <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-reddemo-border">
+                                        <div id="fake-progress-bar" class="bg-rose-500 h-full transition-all duration-300 w-0"></div>
+                                    </div>
+                                </div>
+
+                                <button id="fake-download-btn" onclick="startDownloadClient()" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-play"></i> Установить сейчас (34 MB)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL FILE DOWNLOAD SIMULATION WIDGET / MODAL NOTIFICATION -->
+    <div id="download-progress-banner" class="hidden bg-reddemo-panel border-b border-reddemo-border py-4 px-6 text-white transition-all duration-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-rose-500/20 p-2.5 rounded-lg text-rose-500 animate-spin">
+                    <i class="fa-solid fa-spinner"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold">Сборка дистрибутива клиента RedDemo...</h4>
+                    <p class="text-xs text-reddemo-textMuted">Подключение к резервному серверу RU-MOSCOW</p>
+                </div>
+            </div>
+            <!-- Progress Line -->
+            <div class="flex-grow max-w-lg w-full">
+                <div class="flex justify-between text-[10px] font-mono mb-1 text-gray-400">
+                    <span id="live-speed-text">Скорость: 12.4 MB/s</span>
+                    <span id="live-percent-text">0%</span>
+                </div>
+                <div class="w-full bg-reddemo-bg h-2 rounded-full overflow-hidden border border-reddemo-border">
+                    <div id="live-progress-bar" class="bg-rose-500 h-full w-0 transition-all duration-100"></div>
+                </div>
+            </div>
+            <div class="text-xs text-rose-400 font-mono font-bold" id="live-time-left">Осталось: ~3 сек</div>
+        </div>
+    </div>
+
+    <!-- GAMES SECTION -->
+    <section id="games" class="py-20 bg-reddemo-panel/40 border-b border-reddemo-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">
+                    Каталог доступных игр в RedDemo Client
+                </h2>
+                <p class="text-reddemo-textMuted text-sm">
+                    Все эти 10 знаменитых шедевров полностью вшиты в лаунчер. Никаких торрент-файлов, рекламы или долгих поисков рабочих раздач. Скачивайте мгновенно прямо через клиент.
+                </p>
+            </div>
+
+            <!-- Games Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" id="games-showcase">
+                <!-- Game Card 1 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=350&q=80" alt="Assassin's Creed 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Action</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Assassin's Creed 1</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Оригинальное приключение Альтаира.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">4.2 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 2 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?auto=format&fit=crop&w=350&q=80" alt="Assassin's Creed 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Adventure</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Assassin's Creed 2</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Культовая эпоха Возрождения и Эцио.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">5.8 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 3 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=350&q=80" alt="Assassin's Creed 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">RPG</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Assassin's Creed 3</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Гражданская война в Америке и Коннор.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">9.5 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 4 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=350&q=80" alt="BeamNG Drive" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Simulator</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">BeamNG Drive</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Симулятор мягких тел и краш-тестов.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">11.2 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 5 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=350&q=80" alt="Far Cry 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Shooter</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Far Cry 2</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Хардкорный шутер в саваннах Африки.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">2.1 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 6 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=350&q=80" alt="Far Cry 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Shooter</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Far Cry 3</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Остров безумия, пираты и легендарный Ваас.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">8.3 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 7 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=350&q=80" alt="Geometry Dash" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Arcade</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Geometry Dash 2.208</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Ритм-платформер с последним обновлением.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">0.2 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 8 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=350&q=80" alt="GTA V" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Sandbox</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">GTA V</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Лос-Сантос, три героя и абсолютная свобода.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">48.5 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 9 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=350&q=80" alt="GTA IV" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Sandbox</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">GTA IV</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">История Нико Беллика в мрачном Либерти-Сити.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">13.4 GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 10 -->
+                <div class="bg-reddemo-card border border-reddemo-border rounded-xl overflow-hidden hover:border-rose-500/40 transition-all duration-300 group flex flex-col h-full">
+                    <div class="relative overflow-hidden aspect-[3/4]">
+                        <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=350&q=80" alt="Resident Evil 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-rose-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Survival</span>
+                    </div>
+                    <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
+                        <div>
+                            <h3 class="text-sm font-black text-white group-hover:text-rose-500 transition-colors">Resident Evil 4</h3>
+                            <p class="text-[11px] text-reddemo-textMuted mt-1">Культовый экшен-хоррор про спасение Эшли.</p>
+                        </div>
+                        <div class="pt-2 border-t border-reddemo-border flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-gray-400">Вес архива:</span>
+                            <span class="text-white font-bold">32.1 GB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="py-20 bg-reddemo-bg relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left Column text -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+                        Технологии RedDemo, меняющие представление об играх
+                    </h2>
+                    <p class="text-sm text-reddemo-textMuted leading-relaxed">
+                        RedDemo — это больше, чем обычный загрузчик. Мы создали десктопное приложение, которое делает установку репаков быстрой и безопасной благодаря распределенному кэшированию.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-rose-500/10 text-rose-500 p-3 rounded-lg border border-rose-500/20">
+                                <i class="fa-solid fa-bolt text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-base">Многопоточный P2P Загрузчик</h4>
+                                <p class="text-xs text-reddemo-textMuted">Клиент делит файлы на мелкие блоки, скачивая их параллельно из сотен источников по всему миру. Это гарантирует 100% утилизацию вашего интернет-канала.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-rose-500/10 text-rose-500 p-3 rounded-lg border border-rose-500/20">
+                                <i class="fa-solid fa-file-shield text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-base">Автоматическая SHA-256 валидация</h4>
+                                <p class="text-xs text-reddemo-textMuted">Забудьте об "испорченных архивах". Лаунчер на лету проверяет хэш-сумму скачиваемых файлов, чтобы предотвратить сбои при установке.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="bg-rose-500/10 text-rose-500 p-3 rounded-lg border border-rose-500/20">
+                                <i class="fa-solid fa-microchip text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-base">Ультра-низкое потребление RAM</h4>
+                                <p class="text-xs text-reddemo-textMuted">В отличие от тяжелых Chromium-оболочек, клиент RedDemo оптимизирован на C++ и использует всего 25 МБ ОЗУ в фоновом режиме.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column stats graphics -->
+                <div class="grid grid-cols-2 gap-4 bg-reddemo-card/50 p-6 rounded-2xl border border-reddemo-border">
+                    <div class="bg-reddemo-bg/80 p-5 rounded-xl border border-reddemo-border/60 text-center">
+                        <div class="text-3xl font-black text-rose-500 font-mono">100+ MB/s</div>
+                        <p class="text-[11px] text-gray-400 mt-1 font-bold uppercase tracking-wider">Макс. скорость скачивания</p>
+                    </div>
+                    <div class="bg-reddemo-bg/80 p-5 rounded-xl border border-reddemo-border/60 text-center">
+                        <div class="text-3xl font-black text-green-400 font-mono">0%</div>
+                        <p class="text-[11px] text-gray-400 mt-1 font-bold uppercase tracking-wider">Рекламных модулей</p>
+                    </div>
+                    <div class="bg-reddemo-bg/80 p-5 rounded-xl border border-reddemo-border/60 text-center">
+                        <div class="text-3xl font-black text-yellow-500 font-mono">1.2 млн</div>
+                        <p class="text-[11px] text-gray-400 mt-1 font-bold uppercase tracking-wider">Активных сидов</p>
+                    </div>
+                    <div class="bg-reddemo-bg/80 p-5 rounded-xl border border-reddemo-border/60 text-center">
+                        <div class="text-3xl font-black text-white font-mono">25 MB</div>
+                        <p class="text-[11px] text-gray-400 mt-1 font-bold uppercase tracking-wider">Потребление ОЗУ на ПК</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SYSTEM REQUIREMENTS SECTION -->
+    <section id="requirements" class="py-20 bg-reddemo-panel/30 border-t border-b border-reddemo-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <h2 class="text-3xl font-extrabold text-white">Системные требования приложения</h2>
+                <p class="text-reddemo-textMuted text-sm">Сам лаунчер оптимизирован под любое «железо». Ниже представлены системные требования RedDemo Client:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Minimum -->
+                <div class="bg-reddemo-card border border-reddemo-border p-6 rounded-2xl space-y-4">
+                    <h4 class="text-rose-500 font-extrabold text-lg uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-simple-high"></i> Минимальные
+                    </h4>
+                    <ul class="space-y-2.5 text-xs text-reddemo-textMuted font-mono">
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">ОС:</strong> Windows 7 / 8 / 10 / 11 (64-бит)</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">Процессор:</strong> Intel Core 2 Duo или AMD Athlon</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">ОЗУ:</strong> 1 GB RAM</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">Интернет:</strong> 10 Мбит/с для скачивания на средней скорости</li>
+                        <li><strong class="text-white">Место на диске:</strong> 50 MB (для самого лаунчера)</li>
+                    </ul>
+                </div>
+
+                <!-- Recommended -->
+                <div class="bg-reddemo-card border border-rose-500/20 shadow-xl shadow-rose-500/5 p-6 rounded-2xl space-y-4">
+                    <h4 class="text-green-400 font-extrabold text-lg uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> Рекомендуемые
+                    </h4>
+                    <ul class="space-y-2.5 text-xs text-reddemo-textMuted font-mono">
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">ОС:</strong> Windows 10 / 11 (64-бит)</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">Процессор:</strong> Intel Core i3 / AMD Ryzen 3 и выше</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">ОЗУ:</strong> 4 GB RAM</li>
+                        <li class="border-b border-slate-800 pb-1.5"><strong class="text-white">Интернет:</strong> 100+ Мбит/с для сверхбыстрого P2P</li>
+                        <li><strong class="text-white">Место на диске:</strong> 100 MB на SSD накопителе</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-reddemo-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div class="text-center space-y-4">
+                <h2 class="text-3xl font-extrabold text-white">Часто Задаваемые Вопросы (FAQ)</h2>
+                <p class="text-reddemo-textMuted text-xs">Все, что нужно знать о работе игрового клиента RedDemo.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="bg-reddemo-card border border-reddemo-border p-5 rounded-xl cursor-pointer" onclick="toggleFaq(this)">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white">Безопасно ли скачивать игры через лаунчер RedDemo?</h4>
+                        <i class="fa-solid fa-chevron-down text-rose-500 text-xs transition-transform duration-300"></i>
+                    </div>
+                    <p class="hidden text-xs text-reddemo-textMuted mt-3 leading-relaxed">
+                        Да, абсолютно. Все файлы и дистрибутивы игр перед добавлением в каталог RedDemo проходят проверку популярными антивирусными системами (включая Kaspersky и Dr.Web) и хэшируются. Клиент не содержит стороннего вредоносного ПО и скрытых майнеров.
+                    </p>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-reddemo-card border border-reddemo-border p-5 rounded-xl cursor-pointer" onclick="toggleFaq(this)">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white">Нужно ли платить за игры в лаунчере?</h4>
+                        <i class="fa-solid fa-chevron-down text-rose-500 text-xs transition-transform duration-300"></i>
+                    </div>
+                    <p class="hidden text-xs text-reddemo-textMuted mt-3 leading-relaxed">
+                        Нет. Клиент RedDemo предназначен исключительно для быстрого ознакомления с игровым софтом. Все репаки и файлы скачиваются бесплатно без необходимости покупок и регистрации аккаунта.
+                    </p>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-reddemo-card border border-reddemo-border p-5 rounded-xl cursor-pointer" onclick="toggleFaq(this)">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-sm font-bold text-white">Ругается Windows Defender / антивирус на .exe файлы — что делать?</h4>
+                        <i class="fa-solid fa-chevron-down text-rose-500 text-xs transition-transform duration-300"></i>
+                    </div>
+                    <p class="hidden text-xs text-reddemo-textMuted mt-3 leading-relaxed">
+                        Это классическое ложное срабатывание защитников на взломанные игровые таблетки (таблетка DRM-защиты внутри репака). Мы рекомендуем добавить папку загрузок лаунчера (по умолчанию `C:\Games\RedDemo`) в список исключений вашего антивируса для стабильной работы игр.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-reddemo-header border-t border-reddemo-border py-12 text-center text-xs text-reddemo-textMuted">
+        <div class="max-w-7xl mx-auto px-4 space-y-4">
+            <div class="flex justify-center items-center space-x-2 text-white font-semibold">
+                <div class="bg-rose-500/20 p-2 rounded-lg text-rose-500"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+                <span class="text-base tracking-wider font-black">REDDEMO</span>
+            </div>
+            <p class="max-w-md mx-auto text-[11px] text-gray-500">
+                Официальный сайт загрузчика игрового клиента RedDemo Client на ПК. Мы не храним платные лицензии, весь софт предназначен для ознакомления.
+            </p>
+            <div class="pt-4 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-500">
+                <p>© 2026 RedDemo Corp. Платформа симуляции высокоскоростного даунлоада репаков. Все права сохранены.</p>
+                <div class="flex space-x-4 mt-2 sm:mt-0">
+                    <a href="#" class="hover:text-white">Политика конфиденциальности</a>
+                    <a href="#" class="hover:text-white">Соглашение</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- REAL JS INTERACTIVE ENGINE -->
+    <script>
+        // Start client installation setup simulation
+        function startDownloadClient() {
+            const fakeBtn = document.getElementById('fake-download-btn');
+            const fakeBar = document.getElementById('fake-progress-bar');
+            const fakeText = document.getElementById('fake-progress-text');
+            const liveBanner = document.getElementById('download-progress-banner');
+
+            // Disable triggers to prevent spam clicks
+            fakeBtn.disabled = true;
+            fakeBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-white"></i> Инициализация скачивания...';
+
+            // Show active network download simulator widget
+            liveBanner.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            let progress = 0;
+            const liveBar = document.getElementById('live-progress-bar');
+            const livePercent = document.getElementById('live-percent-text');
+            const liveSpeed = document.getElementById('live-speed-text');
+            const liveTime = document.getElementById('live-time-left');
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 4; // fast progression
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Finalize UI
+                    liveBar.style.width = '100%';
+                    livePercent.innerText = '100%';
+                    liveSpeed.innerText = 'Скачивание завершено';
+                    liveTime.innerText = 'Осталось: 0 сек';
+
+                    fakeBar.style.width = '100%';
+                    fakeText.innerText = 'Готово';
+                    fakeBtn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Скачано успешно!';
+                    
+                    // Trigger actual file generation and downloading in browser
+                    triggerActualInstallerDownload();
+
+                    setTimeout(() => {
+                        liveBanner.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    liveBar.style.width = progress + '%';
+                    livePercent.innerText = progress + '%';
+                    
+                    fakeBar.style.width = progress + '%';
+                    fakeText.innerText = progress + '%';
+
+                    // random network fluctuating speed
+                    const speed = (25 + Math.random() * 15).toFixed(1);
+                    liveSpeed.innerText = `Скорость: ${speed} MB/s`;
+
+                    const secondsLeft = Math.max(1, Math.ceil((100 - progress) / 20));
+                    liveTime.innerText = `Осталось: ~${secondsLeft} сек`;
+                }
+            }, 250);
+        }
+
+        // Real browser file generation download for setup.exe dummy file
+        function triggerActualInstallerDownload() {
+            // Build simple code/string into the binary stream
+            const setupDummyData = "====================================================\n" +
+                                   "  REDDEMO CLIENT LAUNCHER INSTALLER v2.2.0\n" +
+                                   "====================================================\n" +
+                                   "This is a simulated setup file. To launch actual app:\n" +
+                                   "Please load other pages or complete development build.\n" +
+                                   "Enjoy classic gaming repack downloading! \n" +
+                                   "Signed SHA256 Verification: COMPLETED";
+            
+            const blob = new Blob([setupDummyData], { type: "application/octet-stream" });
+            const downloadUrl = URL.createObjectURL(blob);
+            
+            // Create hidden download link and click
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = "RedDemo_Setup_v2.2.0.exe";
+            document.body.appendChild(link);
+            link.click();
+            
+            // Clean memory references
+            document.body.removeChild(link);
+            URL.revokeObjectURL(downloadUrl);
+        }
+
+        // Toggle simple native accordions inside FAQ section
+        function toggleFaq(element) {
+            const bodyText = element.querySelector('p');
+            const icon = element.querySelector('i');
+            
+            if (bodyText.classList.contains('hidden')) {
+                bodyText.classList.remove('hidden');
+                icon.className = 'fa-solid fa-chevron-up text-rose-500 text-xs transition-transform duration-300';
+            } else {
+                bodyText.classList.add('hidden');
+                icon.className = 'fa-solid fa-chevron-down text-rose-500 text-xs transition-transform duration-300';
+            }
+        }
+    </script>
+</body>
+</html>
