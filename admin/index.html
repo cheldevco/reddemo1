@@ -11,6 +11,32 @@
         <h1 class="text-3xl font-bold text-[#ff4d4d] mb-8 text-center">REDDEMO ADMIN PANEL</h1>
         
         <div class="bg-[#1e1e1e] p-6 rounded-lg mb-8 border border-red-900/30">
+            <h2 class="text-xl font-bold mb-4 text-red-400">Добавить Новую Игру в Магазин</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Название игры</label>
+                    <input id="game_name" type="text" placeholder="Пример: Counter-Strike 2" class="w-full p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Цена (в RUB)</label>
+                    <input id="game_price" type="number" placeholder="Пример: 499" class="w-full p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs text-gray-400 mb-1">Прямая ссылка на скачивание архива (.zip или .7z)</label>
+                    <input id="game_url" type="text" placeholder="https://example.com/files/game.zip" class="w-full p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs text-gray-400 mb-1">Путь к исполняемому файлу для запуска (относительно папки игры)</label>
+                    <input id="game_exe" type="text" placeholder="Пример: bin/win64/cs2.exe (или оставить пустым)" class="w-full p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
+                </div>
+            </div>
+            <button onclick="addGame()" class="bg-green-700 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition">
+                Добавить Игру
+            </button>
+            <p id="game_status" class="mt-4 text-sm font-semibold"></p>
+        </div>
+
+        <div class="bg-[#1e1e1e] p-6 rounded-lg mb-8 border border-red-900/30">
             <h2 class="text-xl font-bold mb-4 text-red-400">Сгенерировать Код Активации</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <input id="promo_code" type="text" placeholder="Пример: GIFT500" class="p-3 rounded bg-[#2b2b2b] text-white focus:outline-none border border-zinc-700">
@@ -31,9 +57,50 @@
         const SUPABASE_URL = "https://bayqqmzeulrlrxavnbhh.supabase.co";
         const SUPABASE_KEY = "sb_publishable_8XiZLsKl6Zs87BAyhCaUJw_E1fmp8S1";
         
-        // Избегаем конфликтов имён
         const supabaseAdmin = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // ФУНКЦИЯ ДОБАВЛЕНИЯ ИГРЫ
+        async function addGame() {
+            const name = document.getElementById('game_name').value.trim();
+            const price = parseFloat(document.getElementById('game_price').value);
+            const url = document.getElementById('game_url').value.trim();
+            let exe = document.getElementById('game_exe').value.trim();
+            const status = document.getElementById('game_status');
+
+            if (!name || isNaN(price) || !url) {
+                status.innerText = "Ошибка: Название, цена и ссылка на скачивание обязательны!";
+                status.className = "mt-2 text-sm text-red-400";
+                return;
+            }
+
+            if (!exe) exe = "null";
+
+            status.innerText = "Сохранение игры в базу данных...";
+            status.className = "mt-2 text-sm text-yellow-400";
+
+            const { data, error } = await supabaseAdmin
+                .from('games')
+                .insert([
+                    { name: name, price: price, download_url: url, launch_exe: exe }
+                ]);
+
+            if (error) {
+                console.error(error);
+                status.innerText = "Не удалось добавить игру: " + error.message;
+                status.className = "mt-2 text-sm text-red-400";
+            } else {
+                status.innerText = `🔥 Игра "${name}" успешно добавлена! Она мгновенно появится в лаунчере у всех пользователей.`;
+                status.className = "mt-2 text-sm text-green-400";
+                
+                // Очистка формы
+                document.getElementById('game_name').value = "";
+                document.getElementById('game_price').value = "";
+                document.getElementById('game_url').value = "";
+                document.getElementById('game_exe').value = "";
+            }
+        }
+
+        // ФУНКЦИЯ СОЗДАНИЯ ПРОМОКОДА
         async function createPromo() {
             const codeInput = document.getElementById('promo_code').value.trim();
             const typeInput = document.getElementById('promo_type').value;
@@ -46,10 +113,9 @@
                 return;
             }
 
-            status.innerText = "Создание кода в базе данных...";
+            status.innerText = "Создание кода...";
             status.className = "mt-2 text-sm text-yellow-400";
 
-            // Отправляем строку в таблицу promo_codes
             const { data, error } = await supabaseAdmin
                 .from('promo_codes')
                 .insert([
@@ -57,14 +123,11 @@
                 ]);
 
             if(error) {
-                console.error(error);
-                status.innerText = "Ошибка: Не удалось создать код (возможно, такой код уже существует или RLS заблокировал запрос).";
+                status.innerText = "Ошибка создания кода (возможно дубликат).";
                 status.className = "mt-2 text-sm text-red-400";
             } else {
-                status.innerText = `🔥 Код "${codeInput}" успешно создан и готов к активации в лаунчере!`;
+                status.innerText = `🔥 Код "${codeInput}" успешно создан!`;
                 status.className = "mt-2 text-sm text-green-400";
-                
-                // Очищаем форму
                 document.getElementById('promo_code').value = "";
                 document.getElementById('promo_value').value = "";
             }
